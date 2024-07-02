@@ -17,10 +17,6 @@
 ##  Unique Number: 51515
     
 
-
-
-
-
 # pyspark-template
 
 This is a pyspark project template
