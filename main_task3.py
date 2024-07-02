@@ -98,6 +98,6 @@ if __name__ == "__main__":
     top_3_hours = hour_profitratio.takeOrdered(3, get_key_for_sorting)
 
     # output
-    sc.parallelize(top_3_hours).saveAsTextFile(sys.argv[2])
+    sc.parallelize(top_3_hours, 1).saveAsTextFile(sys.argv[2])
     
     sc.stop()
