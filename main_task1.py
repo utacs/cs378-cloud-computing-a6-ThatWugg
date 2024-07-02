@@ -1,9 +1,9 @@
-import sys
-
-from utils import is_valid_line1
+from __future__ import print_function
+from utils import is_hexadecimal
 from typing import Tuple
-
 from pyspark import SparkContext
+
+import sys
     
 # returns (taxi_id, driver_id) pair
 def to_pair (line: str):
@@ -29,6 +29,37 @@ def to_count (tuple: Tuple[str, set]):
 # descending order
 def get_key_for_sorting (tuple: Tuple[str, int]):
     return -tuple[1]
+
+# definition:
+# - md5sums are 32 length & hexadecimal only
+def is_valid_line1 (line: str):
+    # check comma count
+    comma_count: int = 0
+    first_comma_idx: int = None # keep track of driver id index
+    second_comma_idx: int = None # keep track of end of driver id
+    for idx in range(len(line)):
+        if line[idx] == ',':
+            comma_count += 1
+            if comma_count == 1:
+                first_comma_idx = idx
+            elif comma_count == 2:
+                second_comma_idx = idx
+    if comma_count != 16:
+        return False
+
+    # ensure that length of md5sums are correct
+    if first_comma_idx != 32: return False
+    if second_comma_idx != 65: return False
+    # ensure that contents of md5sums are correct
+    # by checking they are hexadecimal
+    for idx in range(first_comma_idx):
+        if not is_hexadecimal(line[idx]):
+            return False
+    for idx in range(first_comma_idx + 1, second_comma_idx):
+        if not is_hexadecimal(line[idx]):
+            return False
+    
+    return True
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
