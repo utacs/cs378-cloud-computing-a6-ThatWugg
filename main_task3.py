@@ -76,6 +76,9 @@ def reduce (pair0: Tuple[float, float], pair1: Tuple[float, float]):
 def calc_profitratio (surchargemiles: Tuple[float, float]):
     return surchargemiles[0] / surchargemiles[1]
 
+def to_string (tuple: Tuple[int, float]):
+    return str(tuple[0]) + " " + str(tuple[1])
+
 # purpose same as in task 1
 def get_key_for_sorting (hour_profitratio: Tuple[int, float]):
     return -hour_profitratio[1]
@@ -98,6 +101,7 @@ if __name__ == "__main__":
     top_3_hours = hour_profitratio.takeOrdered(3, get_key_for_sorting)
 
     # output
-    sc.parallelize(top_3_hours, 1).saveAsTextFile(sys.argv[2])
+    # put to string format for saveAsTextFile
+    sc.parallelize(top_3_hours).map(to_string).coalesce(1).saveAsTextFile(sys.argv[2])
     
     sc.stop()

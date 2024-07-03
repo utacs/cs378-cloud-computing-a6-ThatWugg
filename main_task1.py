@@ -61,6 +61,9 @@ def is_valid_line1 (line: str):
     
     return True
 
+def to_string (tuple: Tuple[str, int]):
+    return tuple[0] + " " + str(tuple[1])
+
 if __name__ == "__main__":
     if len(sys.argv) != 3:
         print("Args: <file> <output> ", file=sys.stderr)
@@ -79,6 +82,6 @@ if __name__ == "__main__":
     top_10_taxis = taxi_to_unique_drivers_cnt.takeOrdered(10, get_key_for_sorting)
 
     # output, it is doing all this because we want spark to handle file system interaction
-    sc.parallelize(top_10_taxis, 1).saveAsTextFile(sys.argv[2])
+    sc.parallelize(top_10_taxis).map(to_string).coalesce(1).saveAsTextFile(sys.argv[2])
 
     sc.stop()

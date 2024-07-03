@@ -84,6 +84,9 @@ def is_valid_line2 (line: str):
     
     return True
 
+def to_string (tuple: Tuple[str, float]):
+    return tuple[0] + " " + str(tuple[1])
+
 if __name__ == "__main__":
     if len(sys.argv) != 3:
         print("Args: <file> <output> ", file=sys.stderr)
@@ -102,6 +105,6 @@ if __name__ == "__main__":
     top_10_drivers = driver_money_per_minute_pair.takeOrdered(10, get_key_for_sorting)
 
     # output
-    sc.parallelize(top_10_drivers, 1).saveAsTextFile(sys.argv[2])
+    sc.parallelize(top_10_drivers).map(to_string).coalesce(1).saveAsTextFile(sys.argv[2])
     
     sc.stop()
