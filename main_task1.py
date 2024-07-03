@@ -1,5 +1,4 @@
 from __future__ import print_function
-from utils import is_hexadecimal
 from typing import Tuple
 from pyspark import SparkContext
 
@@ -60,6 +59,14 @@ def is_valid_line1 (line: str):
             return False
     
     return True
+
+def is_hexadecimal (char: str):
+    ascii: int = ord(char)
+    if (ascii >= 48 and ascii <= 57 or # 0-9
+       ascii >= 65 and ascii <= 70 or # A-F
+       ascii >= 97 and ascii <= 102):  # a-f
+        return True
+    return False
 
 def to_string (tuple: Tuple[str, int]):
     return tuple[0] + " " + str(tuple[1])
